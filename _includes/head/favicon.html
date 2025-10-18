@@ -1,0 +1,11 @@
+
+{%- if site.favicon -%}
+  <link rel="icon" type="image/png" href="{{ site.favicon | relative_url }}">
+  <link rel="apple-touch-icon" href="{{ site.favicon | relative_url }}">
+  <link rel="shortcut icon" href="{{ site.favicon | relative_url }}">
+{%- else -%}
+  {%- include snippets/prepend-baseurl.html path='/assets/favicon.png' -%}
+  <link rel="icon" href="{{ __return }}">
+{%- endif -%}
+
+<meta name="theme-color" content="#ffffff">

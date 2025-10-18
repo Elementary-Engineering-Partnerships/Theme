@@ -1,0 +1,204 @@
+---
+layout: page
+header: false
+full_width: true
+article_header:
+  type: overlay
+  align: center
+  height: 80vh
+---
+<div class="layout--landing">
+  <div class="heros">
+  {%- for _section in page.data.sections -%}
+    {%- include snippets/get-nav-url.html path=_section.background_image.src -%}
+    {%- assign _url = __return -%}
+    {%- if _section.theme == 'light' -%}
+      <section class="hero hero--center hero--light" id="hero-{{ forloop.index }}"
+    {%- elsif _section.theme == 'dark' -%}
+      <section class="hero hero--center hero--dark" id="hero-{{ forloop.index }}"
+    {%- else -%}
+      <section class="hero hero--center" id="hero-{{ forloop.index }}"
+    {%- endif -%}
+    {%- if _section.background_color -%}
+        style="background-image: url({{ _url }}); background-color: {{ _section.background_color }};">
+    {%- else -%}
+        style="background-image: url({{ _url }});">
+    {%- endif -%}
+
+        <div class="hero__content">
+          <div class="mb-5">
+
+            <h3>{{ _section.title }}</h3>
+             {%- if _section.excerpt -%}
+              <div class="gi-excerpt-box">
+               <p>{{ _section.excerpt }}</p>
+              </div>
+               {%- endif -%}
+
+            {%- if _section.actions -%}
+              <ul class="menu">
+              {%- for _action in _section.actions -%}
+                {%- include snippets/get-nav-url.html path=_action.url -%}
+                {%- assign _url = __return -%}
+                {%- assign _type = _action.type | default: 'outline-info' -%}
+                <li><a class="button button--{{ _type }} button--pill button--lg" href="{{ _url }}">{{ _action.text }}</a></li>
+              {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+          </div>
+
+          {%- if _section.children -%}
+          <div class="gi-cards">
+          {%- for child in _section.children -%}
+          <div class="gi-card">
+          <h3>{{ child.title }}</h3>
+          {%- if child.excerpt -%}
+          <p>{{ child.excerpt }}</p>
+          {%- endif -%}
+
+          {%- if child.actions -%}
+          {%- for _action in child.actions -%}
+            {%- include snippets/get-nav-url.html path=_action.url -%}
+            {%- assign _url = __return -%}
+            {%- assign _type = _action.type | default: 'primary' -%}
+            <a href="{{ _url }}" class="gi-button {{ _type }}">{{ _action.text }}</a>
+          {%- endfor -%}
+          {%- endif -%}
+          </div>
+          {%- endfor -%}
+          </div>
+           {%- endif -%}
+
+          {%- if _section.image.full_width == true -%}
+          </div> {% comment %} end hero__content {% endcomment %}
+          {%- endif -%}
+
+          {%- if _section.image and _section.image.src -%}
+
+            {%- if _section.image.url -%}
+              {%- include snippets/get-nav-url.html path=_section.image.url -%}
+              {%- assign _section_image_url = __return -%}
+            {%- else -%}
+              {%- assign _section_image_url = nil -%}
+            {%- endif -%}
+
+            {%- include snippets/get-nav-url.html path=_section.image.src -%}
+            {%- assign _section_image_src = __return -%}
+
+            {%- if _section.image.is_row -%}
+              <div class="mb-5">
+            {%- endif -%}
+                <div class="mx-auto" style="{{ _section.image.style }}">
+            {%- if _section_image_url -%}
+                  <a href="{{ _section_image_url }}">
+            {%- endif -%}
+                    {%- if _section.image.full_width == true -%}
+                      <img class="hero__cover hero__cover--full-width" src="{{ _section_image_src }}"/>
+                    {%- else -%}
+                      <img class="hero__cover" src="{{ _section_image_src }}"/>
+                    {%- endif -%}
+            {%- if _section_image_url -%}
+                  </a>
+            {%- endif -%}
+                </div>
+            {%- if _section.image.is_row -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+      {%- if _section.image.full_width != true -%}
+        </div> {% comment %} end hero__content {% endcomment %}
+      {%- endif -%}
+
+      {%- if _section.content-%}
+        <p>{{ _section.content }}</p>
+      {%- endif -%}
+      </section>
+  {%- endfor -%}
+  </div>
+</div>
+
+{{ content }}
+
+<style>
+.gi-excerpt-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5em 2em;
+  max-width: 900px;
+  margin: 1.5em auto 2.5em;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  line-height: 1.75;
+  font-size: 1.05rem;
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .gi-excerpt-box {
+    background: #1e1e1e;
+    color: #e5e7eb;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.gi-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 0 1.5rem;
+}
+
+.gi-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2em;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+}
+
+.gi-card h3 {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #111827;
+}
+
+.gi-card p {
+  color: #374151;
+  margin-bottom: 1.5rem;
+}
+
+.gi-button {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  padding: 0.7em 1.5em;
+  border-radius: 999px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gi-button.primary { background-color: #ef4444; }
+.gi-button.success { background-color: #22c55e; }
+.gi-button.info { background-color: #3b82f6; }
+
+.gi-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .gi-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  .gi-card h3, .gi-card p { color: #e5e7eb; }
+}
+</style>
